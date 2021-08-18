@@ -2,6 +2,7 @@
 import pygame as pg
 from pygame.constants import MOUSEBUTTONDOWN
 from pygame.draw import rect;
+import time
 
 #esta função desenha o tabuleiro na janela
 def desenhaTabuleiro(JANELA,pg,pontP1,pontP2):
@@ -64,24 +65,13 @@ def confirmar(indice, pos, p1,p2):
     else:
         tabuleiro[indice] = escolha;
         desenhaPeca(pos[0],pos[1]);
-        if(testaVitoria(escolha)):
-            mostrarMensagemDoGanhador(vez);
-            if(vez=="p1"):
-                pontP1 += 1;
-            else:
-                pontP2 += 1;
-            #reset();
-        elif(not(testaVitoria(escolha)) and espaco == 9):
-            mostrarMensagemDoGanhador("EMPATE");
-            #reset();
+        if(vez == "p1"):
+            vez = "p2"
+            escolha = "o"
         else:
-            if(vez == "p1"):
-                vez = "p2"
-                escolha = "o"
-            else:
-                vez = "p1"
-                escolha = "x"
-            espaco += 1
+            vez = "p1"
+            escolha = "x"
+        espaco += 1
 
 # esta função ela testa onde o mouse clicou e depois ela verifica qual o rect que foi clicado e chama a função desenhar
 def testaOndeMouseClicou():
@@ -121,14 +111,14 @@ def mostrarMensagemDoGanhador(vez):
     arial = pg.font.SysFont('arial', 70)
     mensagem = 'JOGADOR {} VENCEU'.format(vez)
 
-    if vez == 'EMPATE':
+    if vez == 'EMPATOU':
         JANELA.blit(arial.render('DEU VELHA', True, (125, 0, 130), 0), (180, 355))
     else:
         JANELA.blit(arial.render(mensagem, True, (125, 0, 130), 0), (17, 355))
 
 def reset():
-        global escolha, estado, vez, tabuleiro, espaco
-        estado = 'JOGANDO'
+        global escolha, estadoDoJogo, vez, tabuleiro, espaco
+        estadoDoJogo = 'JOGANDO'
         vez = 'p1'
         escolha = 'x'
         espaco = 0
@@ -139,78 +129,98 @@ def reset():
         desenhaTabuleiro(JANELA,pg,pontP1,pontP2);
         pg.display.update()
 
-# inicializa o pygame e as fontes
-pg.init();
-pg.font.init();
+if __name__ == "__main__":
+    # inicializa o pygame e as fontes
+    pg.init();
+    pg.font.init();
 
-LARGURA = 800
-ALTURA = 800
+    LARGURA = 800
+    ALTURA = 800
 
-BRANCO = (255,255,255)
-AZUL = (55, 194, 203)
+    BRANCO = (255,255,255)
+    AZUL = (55, 194, 203)
 
-#variaveis de controle na partida
-espaco = 1
-escolha = "x";
-vez = "p1";
+    #variaveis de controle na partida
+    espaco = 1
+    escolha = "x";
+    vez = "p1";
+    estadoDoJogo = "JOGANDO";
 
-#variaveis globais
-global tabuleiro;
-global rect1;
-global rect2;
-global rect3;
-global rect4;
-global rect5;
-global rect6;
-global rect7;
-global rect8;
-global rect9;
+    #variaveis globais
+    global tabuleiro;
+    global rect1;
+    global rect2;
+    global rect3;
+    global rect4;
+    global rect5;
+    global rect6;
+    global rect7;
+    global rect8;
+    global rect9;
 
 
-#configurações da janela
-JANELA = pg.display.set_mode((LARGURA,ALTURA));#seto o tamanho da tela
-pg.display.set_caption("jogo da velha");# nome da janela
+    #configurações da janela
+    JANELA = pg.display.set_mode((LARGURA,ALTURA));#seto o tamanho da tela
+    pg.display.set_caption("jogo da velha");# nome da janela
 
-#retangulos para fazer as colisões
-#linha 1
-rect1 = pg.Rect(149,187, 160,146);
-rect2 = pg.Rect(321,187, 164,146);
-rect3 = pg.Rect(497,187, 164,146);
-#linha 2
-rect4 = pg.Rect(149,347, 160,166);
-rect5 = pg.Rect(321,347, 164,166);
-rect6 = pg.Rect(497,347, 164,166);
-#linha 3
-rect7 = pg.Rect(149,530, 160,166);
-rect8 = pg.Rect(321,528, 164,166);
-rect9 = pg.Rect(497,528, 164,166);
+    #retangulos para fazer as colisões
+    #linha 1
+    rect1 = pg.Rect(149,187, 160,146);
+    rect2 = pg.Rect(321,187, 164,146);
+    rect3 = pg.Rect(497,187, 164,146);
+    #linha 2
+    rect4 = pg.Rect(149,347, 160,166);
+    rect5 = pg.Rect(321,347, 164,166);
+    rect6 = pg.Rect(497,347, 164,166);
+    #linha 3
+    rect7 = pg.Rect(149,530, 160,166);
+    rect8 = pg.Rect(321,528, 164,166);
+    rect9 = pg.Rect(497,528, 164,166);
 
-tabRect = [rect1,rect2,rect3,
-            rect4,rect5,rect6,
-            rect7,rect8,rect9];
+    tabRect = [rect1,rect2,rect3,
+                rect4,rect5,rect6,
+                rect7,rect8,rect9];
 
-tabuleiro = [1,2,3,
-            4,5,6,
-            7,8,9];
+    tabuleiro = [1,2,3,
+                4,5,6,
+                7,8,9];
 
- #variaveis de pontuação           
-pontP1 = 0;
-pontP2 = 0;
+    #variaveis de pontuação           
+    pontP1 = 0;
+    pontP2 = 0;
 
-janelaAberta = True;
+    janelaAberta = True;
 
-#tem que chamar a função aqui pq senão não funciona, a função 
-desenhaTabuleiro(JANELA,pg,pontP1,pontP2);
+    #tem que chamar a função aqui pq senão não funciona, a função 
+    desenhaTabuleiro(JANELA,pg,pontP1,pontP2);
 
-while(janelaAberta):
-    
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-            janelaAberta = False;
-        if event.type == MOUSEBUTTONDOWN:
-                testaOndeMouseClicou();
-            
-    
-    pg.display.flip()
-
-pg.display.quit()
+    while(janelaAberta):
+        if(estadoDoJogo == "JOGANDO"):
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.display.quit();
+                    janelaAberta = False;
+                    exit();
+                if event.type == MOUSEBUTTONDOWN:
+                    testaOndeMouseClicou();
+                    
+            if(testaVitoria("x")):
+                mostrarMensagemDoGanhador("PLAYER1");
+                pontP1 += 1;
+                estadoDoJogo = "RESETAR";
+            elif(testaVitoria("o")):
+                mostrarMensagemDoGanhador("PLAYER2");
+                pontP2 += 1;
+                estadoDoJogo = "RESETAR";
+            elif(espaco >= 9):
+                mostrarMensagemDoGanhador("EMPATOU");
+                estadoDoJogo = "RESETAR";
+        else:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.display.quit();
+                    exit();
+                if(event.type == MOUSEBUTTONDOWN):
+                    reset();
+                    desenhaTabuleiro(JANELA,pg,pontP1,pontP2);
+        pg.display.flip();
