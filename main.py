@@ -1,11 +1,42 @@
 #importações
 import pygame as pg
-from pygame.constants import MOUSEBUTTONDOWN
+from pygame.constants import MOUSEBUTTONDOWN 
 from pygame.draw import rect;
 import time
 
-#esta função desenha o tabuleiro na janela
-def desenhaTabuleiro(JANELA,pg,pontP1,pontP2):
+#esta função desenha a tela do menu
+def desenhaTelaMenu(JANELA,pg):
+    #deixa o fundo roxo
+    JANELA.fill((112,38,205))
+
+    #adiciona texto na tela
+    fonte = pg.font.SysFont("Robot", 72);
+    lbTextoMenu = fonte.render("Jogo da Velha", 1, VERDE);
+    JANELA.blit(lbTextoMenu, (159, 112));
+
+    pg.draw.rect(JANELA, (181,0,31), rect1Menu);
+
+    fonte = pg.font.SysFont("Robot", 60);
+    lbTextoMenu = fonte.render("P1VSP2", 1, VERDE);
+    JANELA.blit(lbTextoMenu, (313, 379));
+
+    pg.draw.rect(JANELA, VERDE, rect2Menu);
+    
+    lbTextoMenu = fonte.render("EXIT", 1, (181,0,31));
+    JANELA.blit(lbTextoMenu, (342, 480));
+
+def testaOndeMouseClicouNaTelaMenu():
+    mousePos = pg.mouse.get_pos();
+    for p in tabRect:
+        if event.type == MOUSEBUTTONDOWN and p.collidepoint(mousePos):
+            if p == rect1Menu:
+                return "JOGANDO"
+            elif p == rect2Menu:
+                exit()
+
+ 
+#esta função desenha o tabuleiro na JANELA
+def desenhaTelaJogo(JANELA,pg,pontP1,pontP2):
     #deixa o fundo roxo
     JANELA.fill((112,38,205));
 
@@ -19,22 +50,6 @@ def desenhaTabuleiro(JANELA,pg,pontP1,pontP2):
     #desenha retangulo
     pg.draw.rect(JANELA, (83,116,116), (55,124, 689,623));
     pg.draw.rect(JANELA, (88,124,124), (88,155, 624,564));
-    
-
-    #teste area
-    """
-    pg.draw.rect(JANELA, BRANCO, rect1);
-    pg.draw.rect(JANELA, BRANCO, rect2);
-    pg.draw.rect(JANELA, BRANCO, rect3);
-
-    pg.draw.rect(JANELA, BRANCO, rect4);
-    pg.draw.rect(JANELA, BRANCO, rect5);
-    pg.draw.rect(JANELA, BRANCO, rect6);
-
-    pg.draw.rect(JANELA, BRANCO, rect7);
-    pg.draw.rect(JANELA, BRANCO, rect8);
-    pg.draw.rect(JANELA, BRANCO, rect9);
-    """
 
     #colunas
     pg.draw.line(JANELA, AZUL, (314,186), (314,694), 10);
@@ -56,14 +71,15 @@ def desenhaPeca(x,y):
         JANELA.blit(imgR, (x - 50, y - 50))
 
 #esta função ela confirma se a jogada que o jogador fez ja foi feita.
-def confirmar(indice, pos, p1,p2):
-    global escolha, vez, espaco, pontP1, pontP2
+def confirmarPosicaoTelaJogo(indice, pos):
+    global escolha, vez, espaco
     if(tabuleiro[indice] == "x"):
         print("x")
     elif(tabuleiro[indice] == "o"):
         print("o")
     else:
         tabuleiro[indice] = escolha;
+        print(tabuleiro)
         desenhaPeca(pos[0],pos[1]);
         if(vez == "p1"):
             vez = "p2"
@@ -74,28 +90,28 @@ def confirmar(indice, pos, p1,p2):
         espaco += 1
 
 # esta função ela testa onde o mouse clicou e depois ela verifica qual o rect que foi clicado e chama a função desenhar
-def testaOndeMouseClicou():
+def testaOndeMouseClicouNaTelaJogo():
     mousePos = pg.mouse.get_pos();
     for p in tabRect:
         if event.type == MOUSEBUTTONDOWN and p.collidepoint(mousePos):
             if p == rect1:
-                confirmar(0,(230, 270), pontP1, pontP2)
+                confirmarPosicaoTelaJogo(0,(230, 270))
             elif p == rect2:
-                confirmar(1,(405, 270), pontP1, pontP2)
+                confirmarPosicaoTelaJogo(1,(405, 270))
             elif p == rect3:
-                confirmar(2,(575, 270), pontP1, pontP2)
+                confirmarPosicaoTelaJogo(2,(575, 270))
             elif p == rect4:
-                confirmar(3,(230, 430), pontP1, pontP2)
+                confirmarPosicaoTelaJogo(3,(230, 430))
             elif p == rect5:
-                confirmar(4,(405, 430), pontP1, pontP2)
+                confirmarPosicaoTelaJogo(4,(405, 430))
             elif p == rect6:
-                confirmar(5,(575, 430), pontP1, pontP2)
+                confirmarPosicaoTelaJogo(5,(575, 430))
             elif p == rect7:
-                confirmar(6,(230, 610), pontP1, pontP2)
+                confirmarPosicaoTelaJogo(6,(230, 610))
             elif p == rect8:
-                confirmar(7,(405, 610), pontP1, pontP2)
+                confirmarPosicaoTelaJogo(7,(405, 610))
             elif p == rect9:
-                confirmar(8,(575, 610), pontP1, pontP2)
+                confirmarPosicaoTelaJogo(8,(575, 610))
 
 def testaVitoria(vez):
     return ((tabuleiro[0] == vez and tabuleiro[1] == vez and tabuleiro[2] == vez) or
@@ -121,12 +137,12 @@ def reset():
         estadoDoJogo = 'JOGANDO'
         vez = 'p1'
         escolha = 'x'
-        espaco = 0
+        espaco = 1
         tabuleiro = [
             1, 2, 3,
             4, 5, 6,
             7, 8, 9]
-        desenhaTabuleiro(JANELA,pg,pontP1,pontP2);
+        desenhaTelaJogo(JANELA,pg,pontP1,pontP2);
         pg.display.update()
 
 if __name__ == "__main__":
@@ -134,36 +150,26 @@ if __name__ == "__main__":
     pg.init();
     pg.font.init();
 
-    LARGURA = 800
-    ALTURA = 800
+    LARGURA = 800;
+    ALTURA = 800;
 
-    BRANCO = (255,255,255)
-    AZUL = (55, 194, 203)
-
-    #variaveis de controle na partida
-    espaco = 1
-    escolha = "x";
-    vez = "p1";
-    estadoDoJogo = "JOGANDO";
+    BRANCO = (255,255,255);
+    AZUL = (55, 194, 203);
+    VERDE = (88, 124, 124);
 
     #variaveis globais
     global tabuleiro;
-    global rect1;
-    global rect2;
-    global rect3;
-    global rect4;
-    global rect5;
-    global rect6;
-    global rect7;
-    global rect8;
-    global rect9;
-
-
-    #configurações da janela
-    JANELA = pg.display.set_mode((LARGURA,ALTURA));#seto o tamanho da tela
-    pg.display.set_caption("jogo da velha");# nome da janela
+    #global pontP1, pontP2;
+    global rect1,rect2,rect3,rect4,rect5,rect6,rect7,rect8,rect9;
+    global rect1Menu,rect2Menu;
 
     #retangulos para fazer as colisões
+    #retangulos do menu
+    rect1Menu = pg.Rect(307,371, 164,57);
+    rect2Menu = pg.Rect(307,471, 164,57);
+
+    tabRect = [rect1Menu,rect2Menu];
+
     #linha 1
     rect1 = pg.Rect(149,187, 160,146);
     rect2 = pg.Rect(321,187, 164,146);
@@ -185,42 +191,81 @@ if __name__ == "__main__":
                 4,5,6,
                 7,8,9];
 
+    #configurações da JANELA
+    pg.display.set_icon(pg.image.load("./img/pessoas-velhas.png"));#seta icone das Janelas
+    JANELA = pg.display.set_mode((LARGURA,ALTURA),pg.SHOWN);#seta o tamanho da tela
+
+    pg.display.set_caption("Jogo da velha");# nome da JANELA
+
+    estadoDoJogo = "JOGANDO";
+    desenhaUmaVez = True;
+    janelaAberta = True;
+
+    #variaveis de controle na partida
+    espaco = 1;
+    escolha = "x";
+    vez = "p1";
+
     #variaveis de pontuação           
     pontP1 = 0;
     pontP2 = 0;
 
-    janelaAberta = True;
-
-    #tem que chamar a função aqui pq senão não funciona, a função 
-    desenhaTabuleiro(JANELA,pg,pontP1,pontP2);
-
     while(janelaAberta):
         if(estadoDoJogo == "JOGANDO"):
+            #condição para ele sempre desenhar uma unica vez, pq se não ele sempre fica desenhando
+            if(desenhaUmaVez):
+                desenhaTelaJogo(JANELA,pg,pontP1,pontP2);
+                desenhaUmaVez = False;
+            elif(estadoDoJogo == "JOGANDO"):
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        janelaAberta = False;
+                        exit();
+                    if event.type == MOUSEBUTTONDOWN:
+                        testaOndeMouseClicouNaTelaJogo();
+                        
+                if(testaVitoria("x")):
+                    print("entrou x")
+                    pontP1 += 1;
+                    estadoDoJogo = "RESETAR";
+                elif(testaVitoria("o")):
+                    print("entrou o")
+                    pontP2 += 1;
+                    estadoDoJogo = "RESETAR";
+                elif(espaco >= 9):
+                    print("entrou empate")
+                    estadoDoJogo = "RESETAR";
+            if(pontP1 == 2 or pontP2 == 2):
+                print("reseta")
+                pontP1 = 0;
+                pontP2 = 0;
+                estadoDoJogo = "MENU";
+                desenhaUmaVez = True;
+                if(pontP1 == 2):
+                    mostrarMensagemDoGanhador("PLAYER1");
+                    pg.display.flip();
+                    time.sleep(5)
+                else:
+                    mostrarMensagemDoGanhador("PLAYER2");
+                    pg.display.flip();
+                    time.sleep(5)
+            pg.display.flip();
+        elif(estadoDoJogo == "MENU"):
+            desenhaTelaMenu(JANELA,pg);
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.display.quit();
                     janelaAberta = False;
                     exit();
                 if event.type == MOUSEBUTTONDOWN:
-                    testaOndeMouseClicou();
-                    
-            if(testaVitoria("x")):
-                mostrarMensagemDoGanhador("PLAYER1");
-                pontP1 += 1;
-                estadoDoJogo = "RESETAR";
-            elif(testaVitoria("o")):
-                mostrarMensagemDoGanhador("PLAYER2");
-                pontP2 += 1;
-                estadoDoJogo = "RESETAR";
-            elif(espaco >= 9):
-                mostrarMensagemDoGanhador("EMPATOU");
-                estadoDoJogo = "RESETAR";
-        else:
+                    estadoDoJogo = testaOndeMouseClicouNaTelaMenu();
+            pg.display.flip();
+        else:#reseta a tela
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.display.quit();
                     exit();
                 if(event.type == MOUSEBUTTONDOWN):
                     reset();
-                    desenhaTabuleiro(JANELA,pg,pontP1,pontP2);
-        pg.display.flip();
+                    desenhaTelaJogo(JANELA,pg,pontP1,pontP2);
+            pg.display.flip();
