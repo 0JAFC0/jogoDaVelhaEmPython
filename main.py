@@ -12,8 +12,9 @@ def desenhaTelaMenu(JANELA,pg):
     #adiciona texto na tela
     fonte = pg.font.SysFont("Robot", 72);
     lbTextoMenu = fonte.render("Jogo da Velha", 1, VERDE);
-    JANELA.blit(lbTextoMenu, (159, 112));
+    JANELA.blit(lbTextoMenu, (220, 162));
 
+    #area dos botões
     pg.draw.rect(JANELA, (181,0,31), rect1Menu);
 
     fonte = pg.font.SysFont("Robot", 60);
@@ -24,6 +25,11 @@ def desenhaTelaMenu(JANELA,pg):
     
     lbTextoMenu = fonte.render("EXIT", 1, (181,0,31));
     JANELA.blit(lbTextoMenu, (342, 480));
+
+    #imagens da tela
+    JANELA.blit(pg.transform.scale(pg.image.load("./img/jogodavelha.png"),(162,138)),(53,616))
+
+    JANELA.blit(pg.transform.scale(pg.image.load("./img/pessoas-velhas.png"),(128,122)),(623,40))
 
 def testaOndeMouseClicouNaTelaMenu():
     mousePos = pg.mouse.get_pos();
@@ -79,7 +85,6 @@ def confirmarPosicaoTelaJogo(indice, pos):
         print("o")
     else:
         tabuleiro[indice] = escolha;
-        print(tabuleiro)
         desenhaPeca(pos[0],pos[1]);
         if(vez == "p1"):
             vez = "p2"
@@ -193,11 +198,11 @@ if __name__ == "__main__":
 
     #configurações da JANELA
     pg.display.set_icon(pg.image.load("./img/pessoas-velhas.png"));#seta icone das Janelas
-    JANELA = pg.display.set_mode((LARGURA,ALTURA),pg.SHOWN);#seta o tamanho da tela
+    JANELA = pg.display.set_mode((LARGURA,ALTURA));#seta o tamanho da tela
 
     pg.display.set_caption("Jogo da velha");# nome da JANELA
 
-    estadoDoJogo = "JOGANDO";
+    estadoDoJogo = "MENU";
     desenhaUmaVez = True;
     janelaAberta = True;
 
