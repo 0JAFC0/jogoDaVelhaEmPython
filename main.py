@@ -230,23 +230,19 @@ if __name__ == "__main__":
                         testaOndeMouseClicouNaTelaJogo();
                         
                 if(testaVitoria("x")):
-                    print("entrou x")
                     pontP1 += 1;
                     estadoDoJogo = "RESETAR";
                 elif(testaVitoria("o")):
-                    print("entrou o")
                     pontP2 += 1;
                     estadoDoJogo = "RESETAR";
                 elif(espaco >= 9):
-                    print("entrou empate")
                     estadoDoJogo = "RESETAR";
-            if(pontP1 == 2 or pontP2 == 2):
-                print("reseta")
+            if(pontP1 == 3 or pontP2 == 3):
                 pontP1 = 0;
                 pontP2 = 0;
                 estadoDoJogo = "MENU";
                 desenhaUmaVez = True;
-                if(pontP1 == 2):
+                if(pontP1 == 3):
                     mostrarMensagemDoGanhador("PLAYER1");
                     pg.display.flip();
                     time.sleep(5)
