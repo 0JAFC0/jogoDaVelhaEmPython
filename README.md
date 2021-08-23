@@ -1,15 +1,17 @@
 # jogoDaVelhaEmPython
 
+## Pygame
 
+Pygame é uma biblioteca de jogos multiplataforma feita para ser utilizada em conjunto com a linguagem de programação Python.
 
-Criei esse joguinho para praticar um pouco da logica e tambem para apresentar em uma disciplina.
+## Instalação
 
-O que foi utilizado?
+Use o gerenciador de pacotes pip para fazer a instalação do pygame.
 
-​		Jogo Feito com o Pygame
+```bash
+pip install pygame
+```
 
-​		O designer das telas foi feito com a ferramenta de prototypagem Figma
-
-Creditos:
-​		Ícones feitos por <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com</a>
+## Creditos
+Ícones feitos por <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com</a>
 
