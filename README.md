@@ -1,4 +1,5 @@
 # jogoDaVelhaEmPython
+Projetinho feito para ser apresentado na disciplina de SO.
 
 ## Pygame
 
